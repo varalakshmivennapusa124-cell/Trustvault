@@ -1,0 +1,9 @@
+<h1>Upload</h1>
+{% if error %}<p style="color:red">{{ error }}</p>{% endif %}
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<input type="file" name="file"><br>
+<input name="category" placeholder="Category"><br>
+<button type="submit">Upload</button>
+</form>
+<a href="/">Back</a>

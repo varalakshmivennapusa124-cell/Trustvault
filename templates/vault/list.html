@@ -1,0 +1,6 @@
+<h1>My documents</h1>
+<p>{{ request.user.username }} ({{ request.user.role }}) | <a href="/upload/">Upload</a> | <form method="post" action="/accounts/logout/" style="display:inline">{% csrf_token %}<button>Logout</button></form></p>
+<ul>
+{% for d in docs %}<li><a href="/documents/{{ d.id }}/download/">{{ d.name }}</a> ({{ d.owner.username }})</li>
+{% empty %}<li>No documents.</li>{% endfor %}
+</ul>
