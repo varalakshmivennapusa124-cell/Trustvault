@@ -1,0 +1,11 @@
+<h1>Share: {{ doc.name }}</h1>
+{% if message %}<p><b>{{ message }}</b></p>{% endif %}
+<form method="post">{% csrf_token %}
+<input name="username" placeholder="username">
+<select name="level"><option value="read">read</option><option value="edit">edit</option></select>
+<button name="action" value="grant">Grant</button>
+<button name="action" value="revoke">Revoke</button>
+</form>
+<h3>Current access</h3>
+<ul>{% for g in grants %}<li>{{ g.user.username }}: {{ g.level }}</li>{% empty %}<li>None</li>{% endfor %}</ul>
+<a href="/">Back</a>
