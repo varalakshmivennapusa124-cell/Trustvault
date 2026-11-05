@@ -128,3 +128,27 @@ MAILERS = {
 AUTH_USER_MODEL = "accounts.User"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/accounts/login/"
+# --- Deployment settings ---
+import os
+
+import dj_database_url
+
+ON_RENDER = "RENDER" in os.environ
+DEBUG = not ON_RENDER
+
+if ON_RENDER:
+    SECRET_KEY = os.environ["SECRET_KEY"]
+    _host = os.environ["RENDER_EXTERNAL_HOSTNAME"]
+    ALLOWED_HOSTS = [_host]
+    CSRF_TRUSTED_ORIGINS = ["https://" + _host]
+    DATABASES = {"default": dj_database_url.config(conn_max_age=600)}
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_HSTS_SECONDS = 3600
+else:
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+STATIC_ROOT = BASE_DIR / "staticfiles"
