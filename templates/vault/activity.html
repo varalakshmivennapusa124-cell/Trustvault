@@ -1,0 +1,14 @@
+<h1>Activity</h1>
+<p><a href="/">Back</a> | Audit chain: {% if chain_ok %}<b>intact</b>{% else %}<b style="color:red">BROKEN at entry {{ bad_id }}</b>{% endif %}</p>
+<p>Show: <a href="?">all</a> | <a href="?outcome=denied">refused only</a> | <a href="?outcome=allowed">allowed only</a></p>
+<table border="1" cellpadding="4">
+<tr><th>#</th><th>Time</th><th>User</th><th>Action</th><th>Document</th><th>Result</th><th>Detail</th></tr>
+{% for e in page %}
+<tr{% if e.outcome == "denied" %} style="color:#b00"{% endif %}>
+<td>{{ e.id }}</td><td>{{ e.created_at|date:"Y-m-d H:i:s" }}</td><td>{{ e.actor_name }}</td><td>{{ e.action }}</td><td>{{ e.document_name }}</td><td>{{ e.outcome }}</td><td>{{ e.detail }}</td>
+</tr>
+{% endfor %}
+</table>
+<p>{% if page.has_previous %}<a href="?page={{ page.previous_page_number }}&outcome={{ outcome }}">Prev</a>{% endif %}
+Page {{ page.number }} of {{ page.paginator.num_pages }}
+{% if page.has_next %}<a href="?page={{ page.next_page_number }}&outcome={{ outcome }}">Next</a>{% endif %}</p>

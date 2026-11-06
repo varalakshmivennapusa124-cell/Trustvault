@@ -1,6 +1,20 @@
 <h1>My documents</h1>
-<p>{{ request.user.username }} ({{ request.user.role }}) | <a href="/upload/">Upload</a> | <form method="post" action="/accounts/logout/" style="display:inline">{% csrf_token %}<button>Logout</button></form></p>
+<p>{{ request.user.username }} ({{ request.user.role }}) | <a href="/upload/">Upload</a>
+{% if request.user.role == "admin" %}| <a href="/activity/">Activity</a>{% endif %} |
+<form method="post" action="/accounts/logout/" style="display:inline">{% csrf_token %}<button>Logout</button></form></p>
+<form method="get">
+<input name="q" value="{{ q }}" placeholder="Name">
+<input name="owner" value="{{ owner }}" placeholder="Owner">
+<input name="category" value="{{ category }}" placeholder="Category">
+<input type="date" name="date_from" value="{{ date_from }}">
+<input type="date" name="date_to" value="{{ date_to }}">
+<button type="submit">Search</button> <a href="/">Clear</a>
+</form>
 <ul>
-{% for d in docs %}<li><a href="/documents/{{ d.id }}/download/">{{ d.name }}</a> ({{ d.owner.username }}) {% if d.owner_id == request.user.id %}| <a href="/documents/{{ d.id }}/share/">Share</a>{% endif %}</li>
+{% for d in docs %}<li><a href="/documents/{{ d.id }}/download/">{{ d.name }}</a>
+({{ d.owner.username }}, {{ d.category }}, {{ d.created_at|date:"Y-m-d" }})
+{% if d.owner_id == request.user.id %}| <a href="/documents/{{ d.id }}/share/">Share</a> |
+<a href="/documents/{{ d.id }}/edit/">Edit</a> |
+<form method="post" action="/documents/{{ d.id }}/delete/" style="display:inline">{% csrf_token %}<button>Delete</button></form>{% endif %}</li>
 {% empty %}<li>No documents.</li>{% endfor %}
 </ul>

@@ -1,0 +1,7 @@
+<h1>Edit</h1>
+<form method="post">{% csrf_token %}
+<input name="name" value="{{ doc.name }}">
+<input name="category" value="{{ doc.category }}">
+<button type="submit">Save</button>
+</form>
+<a href="/">Back</a>
